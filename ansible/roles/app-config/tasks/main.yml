@@ -1,0 +1,25 @@
+---
+- name: Sync SPA build to S3
+  command: >
+    aws s3 sync {{ build_dir }}/ s3://{{ s3_bucket }}/
+    --delete
+    --cache-control "public, max-age=31536000, immutable"
+    --exclude "index.html"
+  environment:
+    AWS_DEFAULT_REGION: "{{ aws_region }}"
+
+- name: Upload index.html with no-cache headers
+  command: >
+    aws s3 cp {{ build_dir }}/index.html s3://{{ s3_bucket }}/index.html
+    --cache-control "no-cache, no-store, must-revalidate"
+    --content-type "text/html"
+  environment:
+    AWS_DEFAULT_REGION: "{{ aws_region }}"
+
+- name: Invalidate CloudFront cache
+  command: >
+    aws cloudfront create-invalidation
+    --distribution-id {{ cloudfront_distribution_id }}
+    --paths "/*"
+  environment:
+    AWS_DEFAULT_REGION: "{{ aws_region }}"

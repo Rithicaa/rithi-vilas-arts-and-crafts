@@ -1,0 +1,5 @@
+aws_region     = "ap-southeast-2"
+environment    = "dev"
+domain_name    = "dev.rithivilasartsandcrafts.com"
+bucket_name    = "rithi-vilas-arts-crafts-dev"
+hosted_zone_id = "<YOUR_ROUTE53_HOSTED_ZONE_ID>"

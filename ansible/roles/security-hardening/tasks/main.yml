@@ -1,0 +1,28 @@
+---
+- name: Verify S3 bucket blocks all public access
+  command: >
+    aws s3api get-public-access-block --bucket {{ s3_bucket }}
+  register: s3_public_access
+  environment:
+    AWS_DEFAULT_REGION: "{{ aws_region }}"
+
+- name: Assert public access is fully blocked
+  assert:
+    that:
+      - (s3_public_access.stdout | from_json).PublicAccessBlockConfiguration.BlockPublicAcls == true
+      - (s3_public_access.stdout | from_json).PublicAccessBlockConfiguration.RestrictPublicBuckets == true
+    fail_msg: "S3 bucket public access is NOT fully blocked — aborting deployment"
+
+- name: Verify CloudFront uses HTTPS only
+  command: >
+    aws cloudfront get-distribution-config
+    --id {{ cloudfront_distribution_id }}
+  register: cf_config
+  environment:
+    AWS_DEFAULT_REGION: "{{ aws_region }}"
+
+- name: Assert minimum TLS version is TLSv1.2_2021
+  assert:
+    that:
+      - "'TLSv1.2_2021' in (cf_config.stdout | from_json).DistributionConfig.ViewerCertificate.MinimumProtocolVersion"
+    fail_msg: "CloudFront TLS version is below TLSv1.2_2021 — aborting deployment"

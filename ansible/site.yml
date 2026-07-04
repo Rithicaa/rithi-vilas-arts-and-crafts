@@ -1,0 +1,12 @@
+---
+- name: Configure SPA deployment environment
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - vars/config.yml
+
+  roles:
+    - app-config
+    - security-hardening

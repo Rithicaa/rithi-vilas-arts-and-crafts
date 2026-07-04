@@ -1,0 +1,6 @@
+---
+app_name: rithi-vilas-arts-and-crafts
+aws_region: ap-southeast-2
+s3_bucket: "{{ lookup('env', 'S3_BUCKET_NAME') }}"
+cloudfront_distribution_id: "{{ lookup('env', 'CLOUDFRONT_DISTRIBUTION_ID') }}"
+build_dir: dist
