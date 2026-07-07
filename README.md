@@ -95,13 +95,12 @@ Create an S3 bucket and DynamoDB table for Terraform state before running any `t
 ```bash
 # Create state bucket (replace placeholders)
 aws s3api create-bucket \
-  --bucket <YOUR_TF_STATE_BUCKET> \
-  --region ap-southeast-2 \
-  --create-bucket-configuration LocationConstraint=ap-southeast-2
+  --bucket rithi-vilas-tf-state \
+  --region us-east-1
 
 # Enable versioning on state bucket
 aws s3api put-bucket-versioning \
-  --bucket <YOUR_TF_STATE_BUCKET> \
+  --bucket rithi-vilas-tf-state \
   --versioning-configuration Status=Enabled
 ```
 
@@ -112,9 +111,10 @@ Add the following secrets in your GitHub repository settings (`Settings → Secr
 | Secret | Description |
 |---|---|
 | `AWS_DEPLOY_ROLE_ARN` | IAM role ARN for GitHub Actions OIDC |
-| `AWS_REGION` | AWS region (e.g. `ap-southeast-2`) |
 | `TF_STATE_BUCKET` | S3 bucket name for Terraform state |
 | `CLOUDFRONT_DISTRIBUTION_ID` | CloudFront distribution ID (after first apply) |
+
+> `AWS_REGION` is hardcoded to `us-east-1` in the pipeline and does not need to be set as a secret.
 
 > **Never** commit credentials, ARNs, or account IDs to source control.
 
@@ -134,7 +134,7 @@ cd terraform
 terraform init \
   -backend-config="bucket=<YOUR_TF_STATE_BUCKET>" \
   -backend-config="key=prod/terraform.tfstate" \
-  -backend-config="region=ap-southeast-2"
+  -backend-config="region=us-east-1"
 
 terraform plan -var-file="environments/prod/terraform.tfvars"
 terraform apply -var-file="environments/prod/terraform.tfvars"

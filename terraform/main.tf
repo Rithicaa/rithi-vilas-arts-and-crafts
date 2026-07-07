@@ -49,3 +49,12 @@ module "route53" {
   cloudfront_zone_id    = module.cloudfront.hosted_zone_id
   hosted_zone_id        = var.hosted_zone_id
 }
+
+module "iam" {
+  source           = "./modules/iam"
+  project_name     = "rithi-vilas-arts-and-crafts"
+  github_repo      = var.github_repo
+  bucket_name_prod = "rithi-vilas-arts-crafts-prod"
+  bucket_name_dev  = "rithi-vilas-arts-crafts-dev"
+  tf_state_bucket  = var.tf_state_bucket
+}

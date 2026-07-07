@@ -1,5 +1,7 @@
-aws_region     = "ap-southeast-2"
-environment    = "prod"
-domain_name    = "rithivilasartsandcrafts.com"
-bucket_name    = "rithi-vilas-arts-crafts-prod"
-hosted_zone_id = "<YOUR_ROUTE53_HOSTED_ZONE_ID>"
+aws_region           = "us-east-1"
+environment          = "prod"
+domain_name          = "rithivilasartsandcrafts.com"
+bucket_name          = "rithi-vilas-arts-crafts-prod"
+hosted_zone_id       = "Z0829280101Q736X67ZDG"
+tf_state_bucket      = "rithi-vilas-tf-state"
+create_oidc_provider = true

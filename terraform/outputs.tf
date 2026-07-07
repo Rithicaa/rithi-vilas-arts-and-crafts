@@ -12,3 +12,8 @@ output "acm_certificate_arn" {
   description = "ACM certificate ARN"
   value       = module.acm.certificate_arn
 }
+
+output "github_actions_deploy_role_arn" {
+  description = "Copy this ARN and set it as AWS_DEPLOY_ROLE_ARN in GitHub Actions secrets"
+  value       = module.iam.deploy_role_arn
+}
