@@ -109,7 +109,7 @@ jobs:
       - name: Terraform Plan
         working-directory: terraform
         run: |
-          terraform plan \
+          terraform plan -compact-warnings \
             -var-file="environments/${{ github.ref_name == 'main' && 'prod' || 'dev' }}/terraform.tfvars" \
             -out=tfplan
 
