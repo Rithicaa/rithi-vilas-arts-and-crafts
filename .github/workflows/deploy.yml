@@ -110,16 +110,16 @@ jobs:
         working-directory: terraform
         run: |
           terraform plan -compact-warnings \
-            -var-file="environments/${{ github.ref_name == 'main' && 'prod' || 'dev' }}/terraform.tfvars" \
+            -var-file="environments/prod/terraform.tfvars" \
             -out=tfplan
 
   # ─── 4. Terraform Apply + Deploy (main branch only) ─────────────────────────
   deploy:
-    name: Deploy (${{ github.ref_name == 'main' && 'prod' || 'dev' }})
+    name: Deploy (prod)
     runs-on: ubuntu-latest
     needs: [build, terraform-plan]
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
-    environment: ${{ github.ref_name == 'main' && 'production' || 'development' }}
+    environment: production
 
     steps:
       - name: Checkout
@@ -149,9 +149,9 @@ jobs:
         run: |
           terraform apply -auto-approve -compact-warnings \
             -target=module.acm.aws_acm_certificate.this \
-            -var-file="environments/${{ github.ref_name == 'main' && 'prod' || 'dev' }}/terraform.tfvars"
+            -var-file="environments/prod/terraform.tfvars"
           terraform apply -auto-approve -compact-warnings \
-            -var-file="environments/${{ github.ref_name == 'main' && 'prod' || 'dev' }}/terraform.tfvars"
+            -var-file="environments/prod/terraform.tfvars"
 
       - name: Get Terraform outputs
         id: tf-outputs
