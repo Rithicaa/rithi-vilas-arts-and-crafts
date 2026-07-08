@@ -147,7 +147,10 @@ jobs:
       - name: Terraform Apply
         working-directory: terraform
         run: |
-          terraform apply -auto-approve \
+          terraform apply -auto-approve -compact-warnings \
+            -target=module.acm.aws_acm_certificate.this \
+            -var-file="environments/${{ github.ref_name == 'main' && 'prod' || 'dev' }}/terraform.tfvars"
+          terraform apply -auto-approve -compact-warnings \
             -var-file="environments/${{ github.ref_name == 'main' && 'prod' || 'dev' }}/terraform.tfvars"
 
       - name: Get Terraform outputs

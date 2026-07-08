@@ -25,12 +25,20 @@ data "aws_route53_zone" "this" {
   private_zone = false
 }
 
+locals {
+  validation_domains = [
+    var.domain_name,
+    "www.${var.domain_name}",
+    "*.${var.domain_name}"
+  ]
+}
+
 resource "aws_route53_record" "validation" {
   for_each = {
-    for dvo in aws_acm_certificate.this.domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
-      type   = dvo.resource_record_type
-      record = dvo.resource_record_value
+    for domain in local.validation_domains : domain => {
+      name   = tolist([for dvo in aws_acm_certificate.this.domain_validation_options : dvo.resource_record_name if dvo.domain_name == domain])[0]
+      type   = tolist([for dvo in aws_acm_certificate.this.domain_validation_options : dvo.resource_record_type if dvo.domain_name == domain])[0]
+      record = tolist([for dvo in aws_acm_certificate.this.domain_validation_options : dvo.resource_record_value if dvo.domain_name == domain])[0]
     }
   }
 
