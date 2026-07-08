@@ -52,7 +52,7 @@ resource "aws_iam_role" "github_actions_deploy" {
 
 # ── Least-Privilege Deploy Policy ────────────────────────────────────────────
 data "aws_iam_policy_document" "deploy_permissions" {
-  # S3 — sync built assets
+  # S3 — sync built assets + terraform state + full bucket management
   statement {
     effect = "Allow"
     actions = [
@@ -66,6 +66,7 @@ data "aws_iam_policy_document" "deploy_permissions" {
       "s3:CreateBucket",
       "s3:GetBucketPolicy",
       "s3:PutBucketPolicy",
+      "s3:DeleteBucketPolicy",
       "s3:GetBucketPublicAccessBlock",
       "s3:PutBucketPublicAccessBlock",
       "s3:GetEncryptionConfiguration",
@@ -77,7 +78,15 @@ data "aws_iam_policy_document" "deploy_permissions" {
       "s3:GetBucketObjectLockConfiguration",
       "s3:GetLifecycleConfiguration",
       "s3:GetBucketAcl",
-      "s3:PutBucketAcl"
+      "s3:PutBucketAcl",
+      "s3:GetAccelerateConfiguration",
+      "s3:PutAccelerateConfiguration",
+      "s3:GetBucketRequestPayment",
+      "s3:GetBucketLogging",
+      "s3:GetReplicationConfiguration",
+      "s3:ListBucketMultipartUploads",
+      "s3:GetBucketOwnershipControls",
+      "s3:PutBucketOwnershipControls"
     ]
     resources = [
       "arn:aws:s3:::${var.bucket_name_prod}",
@@ -108,7 +117,9 @@ data "aws_iam_policy_document" "deploy_permissions" {
       "cloudfront:CreateResponseHeadersPolicy",
       "cloudfront:GetResponseHeadersPolicy",
       "cloudfront:DeleteResponseHeadersPolicy",
-      "cloudfront:ListResponseHeadersPolicies"
+      "cloudfront:ListResponseHeadersPolicies",
+      "cloudfront:UpdateOriginAccessControl",
+      "cloudfront:UpdateResponseHeadersPolicy"
     ]
     resources = ["*"]
   }
@@ -135,7 +146,9 @@ data "aws_iam_policy_document" "deploy_permissions" {
       "route53:ListHostedZones",
       "route53:ChangeResourceRecordSets",
       "route53:ListResourceRecordSets",
-      "route53:GetChange"
+      "route53:GetChange",
+      "route53:ListTagsForResource",
+      "route53:ListTagsForResources"
     ]
     resources = ["*"]
   }
@@ -161,7 +174,8 @@ data "aws_iam_policy_document" "deploy_permissions" {
       "iam:GetPolicy",
       "iam:GetPolicyVersion",
       "iam:ListAttachedRolePolicies",
-      "iam:ListRolePolicies"
+      "iam:ListRolePolicies",
+      "iam:ListPolicyVersions"
     ]
     resources = ["*"]
   }
