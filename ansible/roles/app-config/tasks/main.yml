@@ -23,3 +23,4 @@
     --paths "/*"
   environment:
     AWS_DEFAULT_REGION: "{{ aws_region }}"
+  when: cloudfront_distribution_id | length > 0

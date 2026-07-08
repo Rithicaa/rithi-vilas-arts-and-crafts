@@ -1,6 +1,0 @@
-aws_region           = "us-east-1"
-environment          = "dev"
-domain_name          = "dev.rithivilasartsandcrafts.com"
-bucket_name          = "rithi-vilas-arts-crafts-dev"
-hosted_zone_id       = "Z0829280101Q736X67ZDG"
-tf_state_bucket      = "rithi-vilas-tf-state"
