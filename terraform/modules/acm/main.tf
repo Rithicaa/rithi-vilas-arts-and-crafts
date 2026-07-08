@@ -1,7 +1,10 @@
 resource "aws_acm_certificate" "this" {
   domain_name               = var.domain_name
-  subject_alternative_names = ["www.${var.domain_name}"]
-  validation_method         = "DNS"
+  subject_alternative_names = [
+    "www.${var.domain_name}",
+    "*.${var.domain_name}"
+  ]
+  validation_method = "DNS"
 
   lifecycle {
     create_before_destroy = true
@@ -18,7 +21,7 @@ resource "aws_acm_certificate_validation" "this" {
 }
 
 data "aws_route53_zone" "this" {
-  name         = var.domain_name
+  zone_id      = var.hosted_zone_id
   private_zone = false
 }
 

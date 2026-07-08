@@ -1,6 +1,6 @@
 aws_region           = "us-east-1"
 environment          = "dev"
-domain_name          = "dev.rithivilasartsandcrafts.com"
+domain_name          = "rithivilasartsandcrafts.org.uk"
 bucket_name          = "rithi-vilas-arts-crafts-dev"
-hosted_zone_id       = "Z0829280101Q736X67ZDG"
+hosted_zone_id       = "Z07156592IZG07FL53X90"
 tf_state_bucket      = "rithi-vilas-tf-state"

@@ -22,9 +22,10 @@ provider "aws" {
 }
 
 module "acm" {
-  source      = "./modules/acm"
-  domain_name = var.domain_name
-  providers   = { aws = aws.us_east_1 }
+  source         = "./modules/acm"
+  domain_name    = var.domain_name
+  hosted_zone_id = var.hosted_zone_id
+  providers      = { aws = aws.us_east_1 }
 }
 
 module "s3" {
