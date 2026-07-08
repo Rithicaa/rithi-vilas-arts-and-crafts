@@ -98,31 +98,8 @@ data "aws_iam_policy_document" "deploy_permissions" {
     ]
   }
 
-  # CloudFront — invalidation + distribution management
-  statement {
-    effect = "Allow"
-    actions = [
-      "cloudfront:CreateInvalidation",
-      "cloudfront:GetDistribution",
-      "cloudfront:GetDistributionConfig",
-      "cloudfront:UpdateDistribution",
-      "cloudfront:CreateDistribution",
-      "cloudfront:DeleteDistribution",
-      "cloudfront:TagResource",
-      "cloudfront:ListDistributions",
-      "cloudfront:CreateOriginAccessControl",
-      "cloudfront:GetOriginAccessControl",
-      "cloudfront:DeleteOriginAccessControl",
-      "cloudfront:ListOriginAccessControls",
-      "cloudfront:CreateResponseHeadersPolicy",
-      "cloudfront:GetResponseHeadersPolicy",
-      "cloudfront:DeleteResponseHeadersPolicy",
-      "cloudfront:ListResponseHeadersPolicies",
-      "cloudfront:UpdateOriginAccessControl",
-      "cloudfront:UpdateResponseHeadersPolicy"
-    ]
-    resources = ["*"]
-  }
+  # CloudFront — moved to separate policy (cloudfront_permissions)
+  # to stay within IAM 6144 character policy size limit
 
   # ACM — certificate management (us-east-1 for CloudFront)
   statement {
@@ -183,8 +160,48 @@ data "aws_iam_policy_document" "deploy_permissions" {
 
 resource "aws_iam_policy" "deploy_permissions" {
   name        = "${var.project_name}-github-actions-deploy-policy"
-  description = "Least-privilege policy for GitHub Actions OIDC deploy role"
+  description = "Core deploy permissions for GitHub Actions OIDC role"
   policy      = data.aws_iam_policy_document.deploy_permissions.json
+
+  tags = {
+    Project   = var.project_name
+    ManagedBy = "terraform"
+  }
+}
+
+data "aws_iam_policy_document" "cloudfront_permissions" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "cloudfront:CreateInvalidation",
+      "cloudfront:GetDistribution",
+      "cloudfront:GetDistributionConfig",
+      "cloudfront:UpdateDistribution",
+      "cloudfront:CreateDistribution",
+      "cloudfront:DeleteDistribution",
+      "cloudfront:TagResource",
+      "cloudfront:UntagResource",
+      "cloudfront:ListTagsForResource",
+      "cloudfront:ListDistributions",
+      "cloudfront:CreateOriginAccessControl",
+      "cloudfront:GetOriginAccessControl",
+      "cloudfront:DeleteOriginAccessControl",
+      "cloudfront:UpdateOriginAccessControl",
+      "cloudfront:ListOriginAccessControls",
+      "cloudfront:CreateResponseHeadersPolicy",
+      "cloudfront:GetResponseHeadersPolicy",
+      "cloudfront:DeleteResponseHeadersPolicy",
+      "cloudfront:UpdateResponseHeadersPolicy",
+      "cloudfront:ListResponseHeadersPolicies"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "cloudfront_permissions" {
+  name        = "${var.project_name}-github-actions-cloudfront-policy"
+  description = "CloudFront permissions for GitHub Actions OIDC role"
+  policy      = data.aws_iam_policy_document.cloudfront_permissions.json
 
   tags = {
     Project   = var.project_name
@@ -195,4 +212,9 @@ resource "aws_iam_policy" "deploy_permissions" {
 resource "aws_iam_role_policy_attachment" "deploy_permissions" {
   role       = aws_iam_role.github_actions_deploy.name
   policy_arn = aws_iam_policy.deploy_permissions.arn
+}
+
+resource "aws_iam_role_policy_attachment" "cloudfront_permissions" {
+  role       = aws_iam_role.github_actions_deploy.name
+  policy_arn = aws_iam_policy.cloudfront_permissions.arn
 }
