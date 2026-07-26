@@ -17,7 +17,7 @@ export function Portfolio() {
               className="group block"
             >
               <div className="aspect-[3/4] bg-sand rounded-sm overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2 relative">
-                {/* Placeholder cover */}
+                <img src="/assets/covers/cover.png" alt={book.title} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-br from-espresso/80 to-charcoal/90 flex flex-col items-center justify-center p-6">
                   <div className="w-16 h-0.5 bg-gold mb-6" />
                   <h3 className="font-serif text-2xl text-cream text-center">{book.title}</h3>

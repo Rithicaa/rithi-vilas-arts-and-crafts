@@ -10,14 +10,14 @@ export function Contact() {
         </p>
         <div className="flex justify-center gap-6">
           <a
-            href="mailto:hello@example.com"
+            href="rithicaavm@gmail.com"
             className="flex items-center gap-2 px-6 py-3 border border-charcoal/20 rounded-sm text-sm hover:border-terracotta hover:text-terracotta transition-colors"
           >
             <Mail size={16} />
             Email
           </a>
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/rithivilasartsandcrafts"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-6 py-3 border border-charcoal/20 rounded-sm text-sm hover:border-terracotta hover:text-terracotta transition-colors"

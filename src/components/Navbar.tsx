@@ -4,7 +4,8 @@ export function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 bg-cream/80 backdrop-blur-md border-b border-sand">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="font-serif text-2xl text-espresso tracking-wide">
+        <Link to="/" className="flex items-center gap-3 font-serif text-2xl text-espresso tracking-wide">
+          <img src="/logo.png" alt="Rithi Vilas logo" className="w-8 h-8" />
           Rithi Vilas
         </Link>
         <div className="flex gap-8 text-sm tracking-wide uppercase text-charcoal/70">

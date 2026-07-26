@@ -24,6 +24,18 @@
     box-sizing: border-box;
   }
 
+  html {
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
+  html, body, a, button, [role="button"] {
+    cursor: inherit;
+  }
+
   body {
     margin: 0;
     background-color: var(--color-cream);

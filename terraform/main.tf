@@ -43,6 +43,29 @@ module "cloudfront" {
   environment         = var.environment
 }
 
+resource "aws_s3_bucket_policy" "spa" {
+  bucket = module.s3.bucket_id
+  policy = data.aws_iam_policy_document.oac_access.json
+}
+
+data "aws_iam_policy_document" "oac_access" {
+  statement {
+    sid    = "AllowCloudFrontOAC"
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+    actions   = ["s3:GetObject"]
+    resources = ["${module.s3.bucket_arn}/*"]
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [module.cloudfront.distribution_arn]
+    }
+  }
+}
+
 module "route53" {
   source                = "./modules/route53"
   domain_name           = var.domain_name
