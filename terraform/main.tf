@@ -29,9 +29,10 @@ module "acm" {
 }
 
 module "s3" {
-  source      = "./modules/s3"
-  bucket_name = var.bucket_name
-  environment = var.environment
+  source                      = "./modules/s3"
+  bucket_name                 = var.bucket_name
+  environment                 = var.environment
+  cloudfront_distribution_arn = module.cloudfront.distribution_arn
 }
 
 module "cloudfront" {
@@ -41,29 +42,6 @@ module "cloudfront" {
   acm_certificate_arn = module.acm.certificate_arn
   domain_name         = var.domain_name
   environment         = var.environment
-}
-
-resource "aws_s3_bucket_policy" "spa" {
-  bucket = module.s3.bucket_id
-  policy = data.aws_iam_policy_document.oac_access.json
-}
-
-data "aws_iam_policy_document" "oac_access" {
-  statement {
-    sid    = "AllowCloudFrontOAC"
-    effect = "Allow"
-    principals {
-      type        = "Service"
-      identifiers = ["cloudfront.amazonaws.com"]
-    }
-    actions   = ["s3:GetObject"]
-    resources = ["${module.s3.bucket_arn}/*"]
-    condition {
-      test     = "StringEquals"
-      variable = "AWS:SourceArn"
-      values   = [module.cloudfront.distribution_arn]
-    }
-  }
 }
 
 module "route53" {
