@@ -6,6 +6,9 @@ export function Hero() {
         <h1 className="font-serif text-6xl md:text-8xl text-espresso leading-tight mb-6">
           Rithi Vilas
         </h1>
+        <h2 className="font-serif text-2xl md:text-3xl text-olive/90 leading-normal mb-8">
+          Arts &amp; Crafts
+        </h2>
         <p className="text-lg text-charcoal/70 max-w-xl mx-auto leading-relaxed">
           A curated collection of sketches, digital art, CAD designs, and photography — 
           crafted with intention and inspired by the world around us.

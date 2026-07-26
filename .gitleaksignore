@@ -1,0 +1,2 @@
+# False positive: example output in README.md from Gitleaks documentation
+f5802a7e56eac922711b81bca2bde2afced29b92:README.md:sidekiq-secret:50

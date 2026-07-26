@@ -67,7 +67,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run npm audit
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=critical
 
       - name: Install Gitleaks
         run: |

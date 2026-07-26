@@ -28,10 +28,16 @@ module "acm" {
   providers      = { aws = aws.us_east_1 }
 }
 
+moved {
+  from = aws_s3_bucket_policy.spa
+  to   = module.s3.aws_s3_bucket_policy.spa
+}
+
 module "s3" {
-  source      = "./modules/s3"
-  bucket_name = var.bucket_name
-  environment = var.environment
+  source                      = "./modules/s3"
+  bucket_name                 = var.bucket_name
+  environment                 = var.environment
+  cloudfront_distribution_arn = module.cloudfront.distribution_arn
 }
 
 module "cloudfront" {

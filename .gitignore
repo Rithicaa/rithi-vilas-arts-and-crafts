@@ -35,5 +35,8 @@ Thumbs.db
 *.log
 npm-debug.log*
 
+# Local binaries
+gitleaks
+
 # Documentation diagrams (local only)
 public/assets/user_journey.png

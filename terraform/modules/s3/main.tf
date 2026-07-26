@@ -32,13 +32,6 @@ resource "aws_s3_bucket_public_access_block" "spa" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_policy" "spa" {
-  bucket = aws_s3_bucket.spa.id
-  policy = data.aws_iam_policy_document.oac_access.json
-
-  depends_on = [aws_s3_bucket_public_access_block.spa]
-}
-
 data "aws_iam_policy_document" "oac_access" {
   statement {
     sid    = "AllowCloudFrontOAC"
@@ -54,5 +47,15 @@ data "aws_iam_policy_document" "oac_access" {
       variable = "AWS:SourceArn"
       values   = [var.cloudfront_distribution_arn]
     }
+  }
+}
+
+resource "aws_s3_bucket_policy" "spa" {
+  bucket     = aws_s3_bucket.spa.id
+  policy     = data.aws_iam_policy_document.oac_access.json
+  depends_on = [aws_s3_bucket_public_access_block.spa]
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
